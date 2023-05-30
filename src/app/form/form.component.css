@@ -1,0 +1,31 @@
+.container{
+    width: 100%;
+}
+    
+.myform{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.center{
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+.dropdowns{
+    display: flex;
+    justify-content: space-between;
+}
+
+.places{
+    display: flex;
+    align-items: center;
+}
+h1{
+    font-weight: bolder;
+    font-size: larger;
+}

@@ -1,0 +1,128 @@
+<div class="container">
+  <form class="myform" [formGroup]="form" (ngSubmit)="onSubmit()">
+    
+    <div class="center">
+      <h1>Form Details</h1>
+      <div class="field">
+        <label for="firstName">First Name</label>
+        <input
+          class="input is-info"
+          type="text"
+          id="firstName"
+          formControlName="firstName"
+        />
+        <div
+          class="help is-danger"
+          *ngIf="form.get('firstName')?.invalid && form.get('firstName')?.touched"
+        >
+          <small>Please enter your first name.</small>
+        </div>
+  
+        <div class="field">
+          <label for="lastName">Last Name</label>
+          <input
+            class="input is-info"
+            type="text"
+            id="lastName"
+            formControlName="lastName"
+          />
+          <div
+            class="help is-danger"
+            *ngIf="form.get('lastName')?.invalid && form.get('lastName')?.touched"
+          >
+            <small>Please enter your last name.</small>
+          </div>
+        </div>
+      </div>
+  
+      <div class="dropdowns">
+        <div class="places">
+          <label for="country">Country</label>
+          <div class="select is-info">
+            <select
+              id="country"
+              formControlName="country"
+              (change)="onCountryChange()"
+            >
+              <option value="" disabled>Select a Country</option>
+              <option *ngFor="let country of countries" [value]="country">
+                {{ country }}
+              </option>
+            </select>
+          </div>
+          <div
+            class="help is-danger"
+            *ngIf="form.get('country')?.invalid && form.get('country')?.touched"
+          >
+            <small>Please select a Country.</small>
+          </div>
+        </div>
+        <div class="places">
+          <label for="state">State</label>
+          <div class="select is-info">
+            <select id="state" formControlName="state" (change)="getCities()">
+              <option value="" disabled>Select a state</option>
+              <option *ngFor="let state of states" [value]="state">
+                {{ state }}
+              </option>
+            </select>
+          </div>
+          <div
+            class="help is-danger"
+            *ngIf="form.get('state')?.invalid && form.get('state')?.touched"
+          >
+            <small>Please select a state.</small>
+          </div>
+        </div>
+        <div class="places">
+          <label for="city">City</label>
+          <div class="select is-info">
+            <select id="city" formControlName="city">
+              <option value="" disabled>Select a city</option>
+              <option *ngFor="let city of cities" [value]="city">
+                {{ city }}
+              </option>
+            </select>
+          </div>
+          <div
+            class="help is-danger"
+            *ngIf="form.get('city')?.invalid && form.get('city')?.touched"
+          >
+            <small>Please select a city.</small>
+          </div>
+        </div>
+      </div>
+  
+      <div class="field">
+        <label for="zipCode">Zip Code:</label>
+        <input
+          class="input is-info"
+          type="text"
+          id="zipCode"
+          formControlName="zipCode"
+        />
+        <div
+          class="help is-danger"
+          *ngIf="form.get('zipCode')?.invalid && form.get('zipCode')?.touched"
+        >
+          <small>Please enter a valid 5-digit ZIP code.</small>
+        </div>
+      </div>
+  
+      <button class="button is-primary" type="submit" [disabled]="form.invalid">
+        Submit
+      </button>
+  
+      <div *ngIf="bool">
+        <div>Details:</div>
+        <div>First Name :{{ form.value.firstName }}</div>
+        <div>Last Name :{{ form.value.lastName }}</div>
+        <div>Country :{{ form.value.country }}</div>
+        <div>State :{{ form.value.state }}</div>
+        <div>City :{{ form.value.city }}</div>
+        <div>Zip Code :{{ form.value.zipCode }}</div>
+      </div>
+    </div>
+  </form>
+  
+</div>
