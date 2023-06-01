@@ -1,15 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {  FormControl, FormGroup, Validators } from '@angular/forms';
 
-
-// const fname = document.getElementById('firstName');
-// const lname = document.getElementById('lastName');
-// const countryValue = document.getElementById('country');
-// const stateValue = document.getElementById('state');
-// const cityValue = document.getElementById('city');
-// const zipCodeValue = document.getElementById('zipCode');
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
@@ -17,14 +9,20 @@ import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 })
 export class FormComponent {
 
-  
+  formValues = {
+    firstName : '',
+    lastName : '',
+    country : '',
+    state : '',
+    city : '',
+    zipCode : ''
+  }
   countries: string[] =[];
   states: string[] = [];
   cities: string[] = [];
   bool: boolean = false;
-  constructor(private formBuilder: FormBuilder, private http: HttpClient) { 
+  constructor(private http: HttpClient) { 
     this.getCountries();
-
   }
   form = new FormGroup({
     firstName: new FormControl ('',[ Validators.required]),
@@ -36,6 +34,8 @@ export class FormComponent {
   });
   rooturl = 'https://countriesnow.space/api/v0.1/countries'
   
+  
+
   getControl(field:string){
     return this.form.get(field) as FormControl;
   }
@@ -50,22 +50,48 @@ export class FormComponent {
   
   onCountryChange(){
     this.http.post('https://countriesnow.space/api/v0.1/countries/states',{country: this.getControl('country').value}).subscribe((response:any) =>{
-      for(let i of response.data.states){
-        this.states.push(i.name);
+      if(response.data.states.length == 0){
+        this.states[0] = 'Nostatesavailable';
       }
+      else{
+        for(let i of response.data.states){
+          this.states.push(i.name);
+        }
+      }
+      
       console.log(this.states);
     })
   }
+
   getCities(){
     this.http.post('https://countriesnow.space/api/v0.1/countries/state/cities',{country: this.getControl('country').value,state : this.getControl('state').value}).subscribe((response:any) =>{
-      this.cities = response.data;
+     
+      if(response.data.length == 0){
+        this.cities[0] = 'Nocitiesavailable';
+      }
+      else{
+        this.cities = response.data;
+      }
+      
       console.log(this.cities);
+    },
+    (error)=>{
+      this.cities[0] = 'NocitiesAvailable';
+      console.log(error);
     })
   }
+  
   onSubmit() {
     if (this.form.valid) {
       this.bool = true;
-      console.log(this.form.value);
+      this.formValues.firstName = this.getControl('firstName').value;
+      this.formValues.lastName = this.getControl('lastName').value;
+      this.formValues.country = this.getControl('country').value;
+      this.formValues.state = this.getControl('state').value;
+      this.formValues.city = this.getControl('city').value;
+      this.formValues.zipCode = this.getControl('zipCode').value;
+      console.log(this.formValues);
+      this.form.reset();
     } 
   }
   
